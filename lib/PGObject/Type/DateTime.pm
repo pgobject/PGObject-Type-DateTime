@@ -39,6 +39,16 @@ This specific module only supports the ISO YMD datestyle.  The MDY or DMY
 datestyles may be usable in future versions but datestyles other than ISO raise
 ambiguity issues, sufficient that they cannot always even be used in PostgreSQL as input.
 
+This module also provides basic default handling.  Times are assigned a date of
+'0001-01-01' and dates are assigned a time of midnight.  Whether this is set is
+persisted, along with whether timezones are set, and these are returned to a 
+valid ISO YMD format on export, if a date component was initially set.
+
+This means you can use this for general math without worrying about many of the
+other nicities.  Parsing ISO YMD dates and standard times (24 hr format) is 
+supported via the from_db interface, which also provides a useful way of handing
+dates in.
+
 =head1 SUBROUTINES/METHODS
 
 =head2 register
