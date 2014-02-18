@@ -1,5 +1,9 @@
 Revision history for PGObject-Type-DateTime
 
+1.00	2014-02-20
+	Added NULL handling
+	Added subclassing support
+
 0.01    2013-11-13
         First version, released on an unsuspecting world.
 
