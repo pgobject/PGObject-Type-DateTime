@@ -104,7 +104,7 @@ sub from_db {
     $args{second} = ($sec || 0);
     $args{nanosecond} = ($nanosec || 0);
     $args{time_zone} = $tz;
-    my $self = __PACKAGE__->new(%args);
+    my $self = "$class"->new(%args);
     $self->{_pgobject_is_date} = 1 if $year;
     $self->{_pgobject_is_time} = 1 if defined $hour;
     return $self;
