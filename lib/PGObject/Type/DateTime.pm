@@ -13,11 +13,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 0.01
+Version 1.00
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '1.00';
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -85,6 +85,7 @@ Parses a date from YYYY-MM-DD format and generates the new object based on it.
 sub from_db {
     my ($class, $value) = @_;
     my ($year, $month, $day, $hour, $min, $sec, $nanosec, $tz);
+    $value = '' if not defined $value;
     $value =~ /(\d{4})-(\d{2})-(\d{2})/ 
           and ($year, $month, $day) = ($1, $2, $3);
     $value =~ /(\d+):(\d+):([0-9.]+)([+-]\d+)?/ 
@@ -104,7 +105,7 @@ sub from_db {
     $args{second} = ($sec || 0);
     $args{nanosecond} = ($nanosec || 0);
     $args{time_zone} = $tz;
-    my $self = __PACKAGE__->new(%args);
+    my $self = "$class"->new(%args);
     $self->{_pgobject_is_date} = 1 if $year;
     $self->{_pgobject_is_time} = 1 if defined $hour;
     return $self;
@@ -118,6 +119,7 @@ Returns the date in YYYY-MM-DD format.
 
 sub to_db {
     my ($self) = @_;
+    return undef unless ($self->is_date or $self->is_time);
     my $dbst = '';
     my $offset = $self->offset;
     $offset = $offset / 60;
