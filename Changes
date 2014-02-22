@@ -1,5 +1,9 @@
 Revision history for PGObject-Type-DateTime
 
+1.00.001 2014-02-22
+	Adjusted the Makefile.PL to provide explicit dependency 
+	for DateTime::TimeZone
+
 1.00	2014-02-20
 	Added NULL handling
 	Added subclassing support
