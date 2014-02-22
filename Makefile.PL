@@ -15,6 +15,7 @@ WriteMakefile(
     PREREQ_PM => {
         'PGObject' => '1.3',
 	'DateTime' => 0,
+	'DateTime::TimeZone' => 0,
     },
     BUILD_REQUIRES => {
         'Test::More' => 0,
