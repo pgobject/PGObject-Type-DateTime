@@ -1,6 +1,6 @@
 package PGObject::Type::DateTime;
 
-use 5.006;
+use 5.008;
 use Carp;
 use strict;
 use warnings;
@@ -13,11 +13,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 1.00.001
+Version 1.0.2
 
 =cut
 
-our $VERSION = '1.00.001';
+our $VERSION = '1.0.2';
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 

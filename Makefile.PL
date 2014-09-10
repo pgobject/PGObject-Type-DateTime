@@ -22,4 +22,14 @@ WriteMakefile(
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'PGObject-Type-DateTime-*' },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/ledgersmb/PGObject-Type-DateTime.git',
+                 web  => 'https://github.com/ledgersmb/PGObject-Type-DateTime',
+             },
+         },
+    },
 );

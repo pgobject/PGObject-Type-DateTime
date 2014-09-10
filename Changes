@@ -1,5 +1,8 @@
 Revision history for PGObject-Type-DateTime
 
+1.0.2   2014-09-10
+        Minor doc fixes
+
 1.00.001 2014-02-22
 	Adjusted the Makefile.PL to provide explicit dependency 
 	for DateTime::TimeZone
