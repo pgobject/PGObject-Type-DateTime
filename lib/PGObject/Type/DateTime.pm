@@ -13,11 +13,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 1.0.2
+Version 1.0.3
 
 =cut
 
-our $VERSION = '1.0.2';
+our $VERSION = '1.0.3';
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -76,6 +76,31 @@ sub register {
     return 1;
 }
 
+=head2 new
+
+Constructor for the PGDate object. Fully compliant with DateTime constructor
+
+=cut
+
+sub new {
+  my $class = shift;
+  my (%args) = @_;
+  my $self = DateTime->new(
+    year       => $args{year}       || 1,
+    month      => $args{month}      || 1,
+    day        => $args{day}        || 1,
+    hour       => $args{hour}       || 0,
+    minute     => $args{minute}     || 0,
+    second     => $args{second}     || 0,
+    nanosecond => $args{nanosecond} || 0,
+    time_zone  => $args{time_zone}  || 0,
+  );
+  bless $self, $class;
+  $self->{_pgobject_is_date} = (defined $args{year} && $args{year} > 1) ? 1 : 0;
+  $self->{_pgobject_is_time} = (defined $args{hour}) ? 1 : 0;
+  return $self;
+}
+
 =head2 from_db
 
 Parses a date from YYYY-MM-DD format and generates the new object based on it.
@@ -93,21 +118,17 @@ sub from_db {
     $tz ||= $default_tz; # defaults to UTC
     $tz .= '00' if $tz =~ /([+-]\d{2}$)/;
     ($sec, $nanosec) = split /\./, $sec if $sec;
-    $nanosec *= 1000 if $nanosec; # no need to worry about truth here
-                                # since 0 * anything is.... --CT
-    $nanosec ||= 0;
-    my %args = ();
-    $args{year} = ($year || 1);
-    $args{month} = ($month || 1);
-    $args{day} = ($day || 1);
-    $args{hour} = ($hour || 0);
-    $args{minute} = ($min || 0);
-    $args{second} = ($sec || 0);
-    $args{nanosecond} = ($nanosec || 0);
-    $args{time_zone} = $tz;
-    my $self = "$class"->new(%args);
-    $self->{_pgobject_is_date} = 1 if $year;
-    $self->{_pgobject_is_time} = 1 if defined $hour;
+    $nanosec *= 1000 if $nanosec;
+    my $self = "$class"->new(
+        year       => $year,
+        month      => $month,
+        day        => $day,
+        hour       => $hour,
+        minute     => $min,
+        second     => $sec,
+        nanosecond => $nanosec,
+        time_zone  => $tz,
+    );
     return $self;
 }
 
