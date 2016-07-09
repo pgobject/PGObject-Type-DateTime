@@ -76,29 +76,83 @@ sub register {
     return 1;
 }
 
-=head2 new
+=head2 _new
 
-Constructor for the PGDate object. Fully compliant with DateTime constructor
+Constructor for the PGDate object. Fully compliant with DateTime
+C<_new> constructor which it uses internally to instantiate objects.
+
+We need to hook this constructor instead of the regular C<new> one,
+because this one is referred to directly on numerous occasions.
 
 =cut
 
-sub new {
+sub _new {
   my $class = shift;
   my (%args) = @_;
-  my $self = DateTime->new(
-    year       => $args{year}       || 1,
-    month      => $args{month}      || 1,
-    day        => $args{day}        || 1,
-    hour       => $args{hour}       || 0,
-    minute     => $args{minute}     || 0,
-    second     => $args{second}     || 0,
-    nanosecond => $args{nanosecond} || 0,
-    time_zone  => $args{time_zone}  || 0,
-  );
+  my $self = $class->SUPER::_new(@_);
   bless $self, $class;
   $self->{_pgobject_is_date} = (defined $args{year} && $args{year} > 1) ? 1 : 0;
   $self->{_pgobject_is_time} = (defined $args{hour}) ? 1 : 0;
   return $self;
+}
+
+=head2 today
+
+Wraps C<DateTime::today>, clearing the internal flag which
+causes C<is_time()> to return a non-false value.
+
+=cut
+
+sub today {
+    my $class = shift;
+    my $self = $class->SUPER::today(@_);
+    $self->{_pgobject_is_time} = 0;
+    return $self;
+}
+
+=head2 last_day_of_month
+
+Wraps C<DateTime::last_day_of_month>, clearing the internal flag which
+causes C<is_time()> to return a non-false value.
+
+=cut
+
+sub last_day_of_month {
+    my $class = shift;
+    my $self = $class->SUPER::last_day_of_month(@_);
+    $self->{_pgobject_is_time} = 0;
+    return $self;
+}
+
+=head2 from_day_of_year
+
+Wraps C<DateTime::from_day_of_year>, clearing the internal flag which
+causes C<is_time()> to return a non-false value.
+
+=cut
+
+sub from_day_of_year {
+    my $class = shift;
+    my $self = $class->SUPER::from_day_of_year(@_);
+    $self->{_pgobject_is_time} = 0;
+    return $self;
+}
+
+=head2 truncate( to => ... )
+
+Wraps C<DateTime::from_day_of_year>, clearing the internal flag which
+causes C<is_time()> to return a non-false value, if the C<to> argument
+is not one of C<second>, C<minute> or C<hour>.
+
+=cut
+
+sub truncate {
+    my $class = shift;
+    my %args = @_;
+    my $self = $class->SUPER::truncate(@_);
+    $self->{_pgobject_is_time} = 0
+        if ! grep { $args{to} eq $_} qw/ hour minute second /;
+    return $self;
 }
 
 =head2 from_db
@@ -120,15 +174,16 @@ sub from_db {
     ($sec, $nanosec) = split /\./, $sec if $sec;
     $nanosec *= 1000 if $nanosec;
     my $self = "$class"->new(
-        year       => $year,
-        month      => $month,
-        day        => $day,
-        hour       => $hour,
-        minute     => $min,
-        second     => $sec,
-        nanosecond => $nanosec,
-        time_zone  => $tz,
-    );
+        year       => $year    || 1,
+        month      => $month   || 1,
+        day        => $day     || 1,
+        hour       => $hour    || 0,
+        minute     => $min     || 0,
+        second     => $sec     || 0,
+        nanosecond => $nanosec || 0,
+        time_zone  => $tz      || 0,
+        );
+    $self->is_time(0) if ! defined $hour;
     return $self;
 }
 
