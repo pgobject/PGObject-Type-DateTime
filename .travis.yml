@@ -13,13 +13,6 @@ addons:
 env:
   - DB_TESTING: 1
 before_install:
-   - "cpanm DBI"
-   - "cpanm DBD::Pg"
-   - "cpanm Try::Tiny"
-   - "cpanm PGObject"
-   - "cpanm DateTime"
-   - "cpanm DateTime::TimeZone"
-   - "cpanm Test::More"
-   - "cpanm Devel::Cover::Report::Coveralls"
+   - eval $(curl https://travis-perl.github.io/init) --auto
 script:
    export RELEASE_TESTING=1 && perl Makefile.PL && make test && cover -test -report coveralls
