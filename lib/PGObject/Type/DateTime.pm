@@ -13,11 +13,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 1.0.4
+Version 1.0.5
 
 =cut
 
-our $VERSION = '1.0.4';
+our $VERSION = '1.0.5';
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -93,6 +93,7 @@ sub _new {
   bless $self, $class;
   $self->{_pgobject_is_date} = (defined $args{year} && $args{year} > 1) ? 1 : 0;
   $self->{_pgobject_is_time} = (defined $args{hour}) ? 1 : 0;
+  $self->{_pgobject_is_tz}   = (defined $args{time_zone}) ? 1 : 0;
   return $self;
 }
 
@@ -167,7 +168,7 @@ sub from_db {
     $value = '' if not defined $value;
     $value =~ /(\d{4})-(\d{2})-(\d{2})/ 
           and ($year, $month, $day) = ($1, $2, $3);
-    $value =~ /(\d+):(\d+):([0-9.]+)([+-]\d+)?/ 
+    $value =~ /(\d+):(\d+):([0-9.]+)([+-]\d{1,4})?/ 
           and ($hour, $min, $sec, $tz) = ($1, $2, $3, $4);
     $tz ||= $default_tz; # defaults to UTC
     $tz .= '00' if $tz =~ /([+-]\d{2}$)/;
@@ -184,6 +185,7 @@ sub from_db {
         time_zone  => $tz      || 0,
         );
     $self->is_time(0) if ! defined $hour;
+    $self->is_tz(0) if $tz == $default_tz;
     return $self;
 }
 
@@ -244,6 +246,21 @@ sub is_time {
        $self->{_pgobject_is_time} = $val;
     }
     return $self->{_pgobject_is_time};
+}
+
+=head2 is_tz($to_set)
+
+If $to_set is set, sets this.  In both cases, returns whether the object is now
+a date.
+
+=cut
+
+sub is_tz {
+    my ($self, $val) = @_;
+    if (defined $val){
+       $self->{_pgobject_is_tz} = $val;
+    }
+    return $self->{_pgobject_is_tz};
 }
 
 =head1 AUTHOR
