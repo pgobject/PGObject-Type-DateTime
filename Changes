@@ -1,5 +1,8 @@
 Revision history for PGObject-Type-DateTime
 
+1.0.5   2016-12-13
+        Add indicator for timezone
+
 1.0.4   2016-07-09
         Override DateTime methods which clearly return a date-value
         (i.e. today(), last_day_of_month() and from_day_of_year())
