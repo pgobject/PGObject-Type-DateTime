@@ -1,6 +1,6 @@
 package PGObject::Type::DateTime;
 
-use 5.008;
+use 5.010;
 use Carp;
 use strict;
 use warnings;
@@ -13,11 +13,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 1.0.5
+Version 2
 
 =cut
 
-our $VERSION = '1.0.5';
+our $VERSION = 2.000000;
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -68,10 +68,15 @@ sub register {
     $types = ['date', 'time', 'timestamp', 'timestamptz'] 
            unless defined $types and @$types;
     for my $type (@$types){
-        my $ret = 
-            PGObject->register_type(registry => $registry, pg_type => $type,
+        if ($PGObject::VERSION =~ /1\.*/) { # 1.x
+            my $ret = 
+                PGObject->register_type(registry => $registry, pg_type => $type,
                                   perl_class => $self);
-        return $ret unless $ret;
+        } else { # higher than 1.x
+	    PGObject::Type::Registry->register_type(
+                 registry => $registry, dbtype => $type, apptype => $self
+            );
+        }
     }
     return 1;
 }
