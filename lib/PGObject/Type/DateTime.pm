@@ -29,6 +29,12 @@ Now all Datetime, Timestamp, and TimestampTZ types are returned
 returned as datetime objects.  Date and time modules may require subclasses
 to serialize properly to the database.
 
+=head1 ONGOING WORK IN 2.X
+
+During the 2.x series we expect to work on better NULL support.  Right now this
+is all delegated to clild classes, but there are likely to be cases where we
+add this to our library directly.
+
 =head1 DESCRIPTION
 
 This module provides a basic wrapper around DateTime to allow PGObject-framework
