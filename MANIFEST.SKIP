@@ -5,6 +5,7 @@
 \B\.git\b
 \B\.hg\b
 \B\.gitignore\b
+\B\.travis.yml\b
 
 # Avoid Makemaker generated and utility files.
 \bMANIFEST\.bak
@@ -32,7 +33,7 @@
 #!end included /usr/lib/perl5/5.10/ExtUtils/MANIFEST.SKIP
 
 ^extlib
-^Su-.+\.tar\.gz$
+^.+\.tar\.gz$
 ^work
 ^tmp
 \bTAGS$
