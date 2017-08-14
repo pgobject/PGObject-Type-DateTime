@@ -14,11 +14,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 2
+Version 2.0.1
 
 =cut
 
-our $VERSION = 2.000000;
+our $VERSION = 2.000001;
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -324,7 +324,7 @@ L<http://search.cpan.org/dist/PGObject-Type-DateTime/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013 Chris Travers.
+Copyright 2013-2017 Chris Travers.
 
 This program is released under the following license: BSD
 
