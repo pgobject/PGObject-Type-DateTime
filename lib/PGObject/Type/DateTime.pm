@@ -324,7 +324,7 @@ L<http://search.cpan.org/dist/PGObject-Type-DateTime/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013-2017 Chris Travers.
+Copyright 2013-2017 The LedgerSMB Core Team
 
 This program is released under the following license: BSD
 
