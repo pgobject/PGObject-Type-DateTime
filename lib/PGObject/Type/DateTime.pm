@@ -14,11 +14,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 2.0.1
+Version 2.0.2
 
 =cut
 
-our $VERSION = 2.000001;
+our $VERSION = 2.000002;
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
