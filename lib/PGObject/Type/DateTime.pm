@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use base qw(DateTime);
 use DateTime::TimeZone;
+use PGObject::Type::DateTime::Infinite;
 use PGObject;
 
 =head1 NAME
@@ -14,11 +15,11 @@ PGObject::Type::DateTime - DateTime Wrappers for PGObject
 
 =head1 VERSION
 
-Version 2.0.2
+Version 2.1.0
 
 =cut
 
-our $VERSION = 2.000002;
+our $VERSION = '2.1.0';
 our $default_tz = DateTime::TimeZone->new(name => 'UTC');
 
 
@@ -124,6 +125,24 @@ sub today {
     return $self;
 }
 
+=head2 inf_future
+
+Returns a timestamp infinitely far in the future.  This wraps
+C<DateTime::Infinite::Future>.
+
+=cut
+
+sub inf_future { PGObject::Type::DateTime::Infinite::Future->new }
+
+=head2 inf_past
+
+Returns a timestamp infinitely far in the past.  This wraps
+C<DateTime::Infinite::Past>
+
+=cut
+
+sub inf_past { PGObject::Type::DateTime::Infinite::Past->new }
+
 =head2 last_day_of_month
 
 Wraps C<DateTime::last_day_of_month>, clearing the internal flag which
@@ -179,6 +198,8 @@ sub from_db {
     my ($class, $value) = @_;
     my ($year, $month, $day, $hour, $min, $sec, $nanosec, $tz);
     $value = '' if not defined $value;
+    return inf_future if $value =~ /^\+?infinity$/;
+    return inf_past if $value eq '-infinity';
     $value =~ /(\d{4})-(\d{2})-(\d{2})/ 
           and ($year, $month, $day) = ($1, $2, $3);
     $value =~ /(\d+):(\d+):([0-9.]+)([+-]\d{1,4})?/ 

@@ -1,6 +1,7 @@
 Changes
 ignore.txt
 lib/PGObject/Type/DateTime.pm
+lib/PGObject/Type/DateTime/Infinite.pm
 LICENSE
 Makefile.PL
 MANIFEST

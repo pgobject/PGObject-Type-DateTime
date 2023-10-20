@@ -1,7 +1,7 @@
 #!perl
 
 use PGObject::Type::DateTime;
-use Test::More tests => 33;
+use Test::More tests => 41;
 
 my $test;
 
@@ -37,3 +37,14 @@ isa_ok $test, 'DateTime', 'from_day_of_year, isa date time';
 isa_ok $test, 'PGObject::Type::DateTime', 'from_day_of_year, is expected class';
 ok ! $test->is_time, 'from_day_of_year has no time';
 
+$test = PGObject::Type::DateTime->inf_future;
+isa_ok $test, 'DateTime', 'Infinite future datetime is DateTime';
+isa_ok $test, 'DateTime::Infinite::Future', 'Infinite future datetime is DateTime::Infinite::Future';
+isa_ok $test, 'PGObject::Type::DateTime', 'Infinite future datetime is PGObject::Type::DateTime';
+is $test->to_db, 'infinity', "Infinite future datetime serializes to db as 'infinity'";
+
+$test = PGObject::Type::DateTime->inf_past;
+isa_ok $test, 'DateTime', 'Infinite past datetime is DateTime';
+isa_ok $test, 'DateTime::Infinite::Past', 'Infinite past datetime is DateTime::Infinite::Past';
+isa_ok $test, 'PGObject::Type::DateTime', 'Infinite past datetime is PGObject::Type::DateTime';
+is $test->to_db, 'infinity', "Infinite past datetime serializes to db as '-infinity'";

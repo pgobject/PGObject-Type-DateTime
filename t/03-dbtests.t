@@ -26,6 +26,14 @@ my $functions = {
                create or replace function test__roundtrip(date) returns date
                language sql as
                $$SELECT $1;$$',
+     infinity  => q|
+               create or replace function test__infinity() returns timestamp
+               language sql as
+               $$ select 'infinity'::timestamp; $$|,
+     infpast   => q|
+               create or replace function test__infpast() returns timestamp
+               language sql as
+               $$ select '-infinity'::timestamp; $$|,
                
 };
 
@@ -46,14 +54,14 @@ for my $fnc (keys %$functions){
 # Planning
 
 if ($dbh) {
-   plan tests => 11;
+   plan tests => 15;
 } else {
    plan skipall => "No database connection, or connection failed";
 }
 
 # Test cases
 
-for my $type (qw(date time timestamp timestamptz)){
+for my $type (qw(date time timestamp timestamptz infinity infpast)){
     my ($ref) = PGObject->call_procedure(
            funcname   => $type,
            funcprefix => 'test__',
