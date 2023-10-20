@@ -1,4 +1,4 @@
-use Test::More;
+use Test2::V0;
 use DBI;
 use PGObject;
 use PGObject::Type::DateTime;
@@ -54,7 +54,7 @@ for my $fnc (keys %$functions){
 # Planning
 
 if ($dbh) {
-   plan tests => 15;
+   plan 15;
 } else {
    plan skipall => "No database connection, or connection failed";
 }

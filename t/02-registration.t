@@ -1,5 +1,7 @@
 
-use Test::More tests => 15;
+use Test2::V0;
+
+plan 15;
 
 use PGObject;
 use PGObject::Type::DateTime;
@@ -18,7 +20,7 @@ diag Dumper(\%{"::PGObject::Type::"});
 # 4.  Registration with custom registry 'test', default types
 # 5.  Registry properly lists all appropriate types.
 
-ok(PGObject->new_registry('test'), 'creating test registry');
+ok(PGObject::Type::Registry->new_registry('test'), 'creating test registry');
 
 ok(PGObject::Type::DateTime->register(), 'default registration');
 ok(PGObject::Type::DateTime->register(types => ['mytime']), 'mytime registration');
