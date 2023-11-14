@@ -1,5 +1,11 @@
 Revision history for PGObject-Type-DateTime
 
+2.1.1   2023-11-14
+        Bumping minimum PGObject version to 2.0.0 due to changes in test cases.
+
+2.1.0   2023-11-03
+        New support for infinity and -infinity in PostgreSQL timestamp fields
+
 2.0.2   2019-09-19
         Set minimum DateTime dependency to 1.05 (found by cpantesters)
 
